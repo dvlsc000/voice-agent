@@ -12,3 +12,4 @@ export * from './llm/openai-compatible';
 export * from './llm/scripted';
 export * from './llm/tool-specs';
 export * from './conversation/engine';
+export * from './call-lifecycle';

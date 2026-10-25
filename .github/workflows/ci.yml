@@ -28,6 +28,7 @@ jobs:
           for f in supabase/migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f "$f" > /dev/null; done
       - run: cd packages/db && npx vitest run
       - run: cd packages/server && npx vitest run
+      - run: cd apps/voice-gateway && npx vitest run
       - name: Build web
         run: pnpm --filter @vp/web build
         env:

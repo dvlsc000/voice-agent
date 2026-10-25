@@ -21,3 +21,4 @@ for f in "$ROOT"/supabase/migrations/*.sql; do
 done
 (cd "$ROOT/packages/db" && npx vitest run "$@")
 (cd "$ROOT/packages/server" && npx vitest run "$@")
+(cd "$ROOT/apps/voice-gateway" && npx vitest run "$@")

@@ -27,7 +27,7 @@ export interface TranscriptSegment {
   at: string;
 }
 
-const OUTCOME_PRIORITY: CallOutcome[] = ['escalated', 'booked', 'rescheduled', 'cancelled', 'lead_captured', 'message_taken', 'transferred', 'info_given'];
+const OUTCOME_PRIORITY: CallOutcome[] = ['escalated', 'booked', 'rescheduled', 'cancelled', 'lead_captured', 'message_taken', 'transferred', 'failed', 'info_given'];
 
 const FALLBACK_LINES: Record<Language, { trouble: string; repeat: string }> = {
   en: {
