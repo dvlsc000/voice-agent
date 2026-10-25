@@ -125,6 +125,7 @@ export default async function ClientDetail({ params, searchParams }: { params: P
           </section>
           <section aria-labelledby="h-bill">
             <h2 id="h-bill" className="mb-2">Billing</h2>
+            <p className="mb-3"><a href={`/admin/clients/${id}/privacy`} className="text-action-ink hover:underline">Privacy requests (access and erasure)</a></p>
             <p className="sheet px-4 py-3">Plan {org.plan_code ?? 'none'} · {org.billing_status === 'incomplete' ? 'no payment method yet' : org.billing_status}</p>
           </section>
         </aside>
