@@ -105,7 +105,7 @@ export const TOOL_DEFINITIONS = {
     description: 'Record a new-client enquiry with the template-defined intake fields.',
     args: z
       .object({
-        fields: z.record(z.string().max(500)),
+        fields: z.record(z.string(), z.string().max(500)),
         summary: z.string().max(600),
         urgency: z.enum(['normal', 'urgent']).default('normal'),
       })
