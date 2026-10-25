@@ -6,7 +6,9 @@ Read this first in every session. Architecture: `docs/adr/`. Current state: `doc
 
 - **Never claim something works without evidence** (a passing test, a tool result, a deployment log). Use the statuses
   in `docs/STATUS.md` and update that file when status changes.
-- **Schema changes only through new files in `supabase/migrations/`.** Never edit an applied migration. Every new
+- **Schema changes only through new files in `supabase/migrations/`.** Never edit an applied migration. When applying
+  through the Supabase connector, rename the file to the version Supabase records (`list_migrations`) and regenerate
+  `packages/db/src/database.types.ts`. Every new
   table: RLS enabled, explicit grants, `organization_id` + composite FKs for tenant data, tests in `packages/db/test`.
 - **Server code bypasses RLS** — every query in `packages/server` and `apps/web/lib/db.ts` callers must be scoped by an
   organization id resolved server-side. Never take an organization id from a request body or from model output.

@@ -4,7 +4,7 @@ Multi-tenant AI phone reception for small businesses in Ireland and Croatia: ans
 takes messages and enquiries, and gives each business a simple dashboard. Built as one shared platform where adding a
 client is configuration, not code.
 
-**Status: foundation built and locally tested; not deployed.** See [docs/STATUS.md](docs/STATUS.md).
+**Status: all phases implemented and tested against simulated providers; database live on the Supabase dev project; not deployed.** See [docs/STATUS.md](docs/STATUS.md).
 
 | Doc | What's in it |
 |---|---|
@@ -15,6 +15,9 @@ client is configuration, not code.
 | [docs/cost-model.md](docs/cost-model.md) | Unit economics with sourced rates |
 | [docs/risks.md](docs/risks.md) | Risk register |
 | [docs/external-actions.md](docs/external-actions.md) | Decisions, accounts and legal reviews needed from the business |
+| [docs/launch-checklist.md](docs/launch-checklist.md) | Everything required before calling it production-ready |
+| [docs/known-limitations.md](docs/known-limitations.md) | What doesn't work yet, honestly |
+| [docs/operations/](docs/operations/) | Deployment, incident response, backups, onboarding SOP, extending, troubleshooting |
 
 ## Local development
 

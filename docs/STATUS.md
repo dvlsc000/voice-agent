@@ -3,43 +3,49 @@
 Updated 2026-10-25. Statuses: Not started · Implemented but untested · Locally tested · Integration tested ·
 Staging verified · Production verified · Blocked by external dependency.
 
-**Overall: foundation built; database live on the Supabase development project; app not deployed. Not production-ready.** No real call has been made.
+**Overall: all phases implemented and tested against simulated providers; database live on the Supabase development
+project; web app and voice gateway not deployed. Pilot-ready once provider accounts exist and the launch checklist's
+verification section passes. Not production-ready.** No real phone call has been made yet.
 
 ## Components
 
 | Area | Status | Evidence |
 |---|---|---|
-| Domain logic (`packages/core`): availability incl. DST, colloquial times (IE "half five" vs HR "pola pet"), booking state machine, caller verification, templates (barbershop, dental, law office, generic), tool allowlist + authorization, prompt compiler with AI disclosure, escalation detector, cost model, plans/overage/grace policy | **Locally tested** | 46 unit tests pass |
-| Database schema: 4 migrations, ~40 tables, RLS on all, exclusion constraint against double booking, DB-level booking state machine, audit triggers, jobs queue, retention | **Locally tested** on PostgreSQL 16 + Supabase auth shim | 24 tests pass (`pnpm db:test`) |
-| Same schema on Supabase dev project `didfoshmymuuzdlwhugd` (PG 17.11, eu-west-1) | **Integration tested** — 5 migrations applied 2026-10-25 after dropping the prototype tables (D1: approved). Isolation check on the live DB: 16/16 expected results (cross-tenant reads/writes blocked, analyst cannot see customers, owner cannot change status or read salt, anon denied, support read-only, double booking rejected); test data rolled back. Security advisor: only intentional INFO notes; performance advisor: FK indexes added. | Supabase advisors, `list_migrations` |
-| Booking engine + tool executor (`packages/server`): availability, hold→commit→confirm, idempotent replay, verify/reschedule/cancel, external-calendar failure handling, messages, transfers, PII-redacted call trace | **Integration tested** against real Postgres (no external calendar, no voice) | 9 tests pass |
-| Client provisioning from template (idempotent, draft agent, go-live blockers) | **Integration tested** against real Postgres | 3 tests pass |
-| Web app: magic-link sign-in (invite-only), MFA gate for operators, client dashboard (Today rail, calls, call detail, bookings, messages, hours & prices), operator console (overview, clients, create client, client checklist) | **Implemented, builds** — not run against a live Supabase project; **not visually reviewed** (no headless browser available in this workspace) | `next build` succeeds, 17 routes |
-| Voice gateway (Twilio Media Streams → STT → LLM → TTS) | **Not started** — blocked on A2–A6 | — |
-| Google Calendar / Microsoft 365 adapters | Not started (interface + failure semantics done and tested with fakes) | — |
-| Stripe billing, webhooks | Not started (plans, overage, grace policy logic done) | — |
-| Notifications (email/SMS worker) | Not started (jobs are enqueued with dedupe keys) | — |
-| Website import for onboarding | Not started | — |
-| CI | Workflow written, **not run** (no GitHub connection) | `.github/workflows/ci.yml` |
+| Domain logic: scheduling (DST), IE/HR colloquial times, booking state machine, caller verification, templates, tool authorization, prompt compiler, escalation detector, cost model, plans/grace policy, notification templates | **Locally tested** | 46 unit tests |
+| Database: 7 migrations, RLS on every table, double-booking exclusion constraint, DB-level state machine, audit, jobs, retention, test runs, billing order-safety | **Integration tested** on Supabase dev (PG 17.11, eu-west-1): live isolation check 16/16; security advisor only intentional INFO notes; FK indexes added. Also 24 local RLS tests | advisors, `list_migrations` |
+| Booking engine + tool executor | **Integration tested** (real Postgres) | 9 tests |
+| Client provisioning from templates | **Integration tested** | 3 tests |
+| Background worker: confirmations, staff alerts, reminders, daily summaries, booking sweeper/reconciliation, retention, usage roll-up, Stripe usage reporting | **Integration tested** (console email sender) | 6 tests |
+| Conversation engine: streaming model client, sentence streaming, escalation safety net, outcomes, model-outage handling | **Integration tested** with scripted model | 7 tests |
+| Voice gateway: Twilio webhooks (signature-checked), media-stream WebSocket, Deepgram EU STT, Deepgram Aura / Azure TTS, barge-in, silence, max length, fallbacks, transfers, voicemail, call finalisation | **Integration tested end to end with simulated speech + model** (real HTTP/WebSocket/DB) — **Blocked** for live: Twilio/Deepgram/Azure/model accounts | 13 tests incl. full simulated booking call |
+| Call routing, billing-aware service levels, cost and usage per call | **Integration tested** | 4 tests |
+| Agent versions: drafts, dry-run test calls (real model in production), publish gate, rollback | **Integration tested** with rule-based model | 5 tests |
+| Google Calendar: OAuth (signed state), Vault token storage (verified on Supabase), idempotent adapter, busy times, reconciliation | **Integration tested** against simulated Google API — **Blocked** for live: Google OAuth app | 8 + 2 tests |
+| Stripe: checkout, portal, verified/idempotent/order-safe webhooks, meter-event usage, dunning | **Integration tested** against simulated Stripe — **Blocked** for live: Stripe account | 7 tests |
+| Onboarding: SSRF-safe website import (robots.txt, evidence), reviewed apply, number connection, supervised call, go-live gate | **Integration tested** | 8 + 5 tests |
+| Privacy: access export, verified erasure with audit scrubbing | **Integration tested** | 3 tests |
+| Web app: client dashboard (today rail, calls, call detail, bookings, messages, settings: hours/services/calendar/staff/closures/answers/team, billing), operator console (overview, clients, create client, set up & go live, assistant versions & tests, plans, operations, privacy) | **Implemented, builds** — not run against live Supabase; **not visually reviewed** | `next build` succeeds (29 routes) |
+| Documentation: ADRs, cost model, risks, deployment, incident response, backups, onboarding SOP, extending, troubleshooting, limitations, launch checklist | Written | `docs/` |
+| CI | Written; **runs on GitHub** (push to `dvlsc000/voice-agent`) — check the Actions tab | `.github/workflows/ci.yml` |
 
-## Test results (latest run)
+## Test results (latest full run)
 
 | Suite | Result |
 |---|---|
 | `packages/core` unit | 46/46 passed |
 | `packages/db` RLS & integrity (local PG16) | 24/24 passed |
-| `packages/server` booking flow + provisioning (local PG16) | 12/12 passed |
+| `packages/server` integration (local PG16) | 67/67 passed |
+| `apps/voice-gateway` session + end-to-end simulated call | 13/13 passed |
+| Live Supabase isolation check (PG17) | 16/16 expected results |
 | `apps/web` typecheck + production build | passed |
 
 ## Deployed
 
-- Database schema to the Supabase **development** project (no client data). Web app and voice gateway: not deployed.
+- Database schema (7 migrations) to the Supabase **development** project. No client data.
+- Code pushed to GitHub `dvlsc000/voice-agent`.
+- Web app and voice gateway: **not deployed** (no hosting accounts yet).
 
-## Next implementation steps
+## What blocks a pilot
 
-1. Connect the repository to GitHub so CI runs (repo name needed).
-2. Voice gateway spike: Pipecat vs LiveKit Agents on Twilio `ie1` with Deepgram EU — measure latency gate.
-3. Croatian STT/TTS bake-off.
-4. Notification worker (email first), stale-`committing` sweeper, usage roll-up job.
-5. Google Calendar adapter with contract tests.
-6. Stripe subscriptions + webhook handler.
+See `docs/external-actions.md` (accounts A2–A11) and `docs/launch-checklist.md`. Shortest path to a first real call:
+Twilio (ie1) + Deepgram + an EU model key + a host for the gateway → deploy → one supervised call.

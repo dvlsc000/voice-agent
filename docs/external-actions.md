@@ -1,7 +1,7 @@
 # Remaining external actions
 
 Things only you (or an adviser) can do. Each says why it is needed and what it unblocks.
-Updated 2026-10-25.
+Updated 2026-10-25. Environment variable names for each service are in `apps/web/.env.example` and `apps/voice-gateway/.env.example`.
 
 ## Decisions needed now
 
@@ -15,7 +15,7 @@ Updated 2026-10-25.
 
 | # | Action | Unblocks |
 |---|---|---|
-| A1 | **Connect GitHub** in claude.ai settings (or give an `owner/repo`) so the code lives in your repository and CI runs. | Source control off this workspace, CI, deploys. |
+| A1 | ~~Connect GitHub~~ **Done 2026-10-25**: code in `dvlsc000/voice-agent`. | — |
 | A2 | **Twilio account** with the **Ireland (`ie1`) region** enabled; one Irish local number for testing. | First real test call. |
 | A3 | **Deepgram** account (EU endpoint) and **Soniox** account. | English and Croatian speech recognition tests. |
 | A4 | **LLM provider with confirmed EU processing** — Mistral (confirm region + DPA), or Azure OpenAI / AWS Bedrock in an EU region. | The assistant's reasoning step. |

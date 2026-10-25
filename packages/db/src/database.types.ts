@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_test_runs: {
+        Row: {
+          agent_version_id: string
+          created_at: string
+          created_by: string | null
+          failed: number
+          finished_at: string | null
+          id: string
+          model: string
+          organization_id: string
+          passed: number
+          results: Json
+          status: string
+        }
+        Insert: {
+          agent_version_id: string
+          created_at?: string
+          created_by?: string | null
+          failed?: number
+          finished_at?: string | null
+          id?: string
+          model: string
+          organization_id: string
+          passed?: number
+          results?: Json
+          status: string
+        }
+        Update: {
+          agent_version_id?: string
+          created_at?: string
+          created_by?: string | null
+          failed?: number
+          finished_at?: string | null
+          id?: string
+          model?: string
+          organization_id?: string
+          passed?: number
+          results?: Json
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_test_runs_organization_id_agent_version_id_fkey"
+            columns: ["organization_id", "agent_version_id"]
+            isOneToOne: false
+            referencedRelation: "agent_versions"
+            referencedColumns: ["organization_id", "id"]
+          },
+        ]
+      }
       agent_versions: {
         Row: {
           agent_id: string
@@ -80,6 +130,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "industry_templates"
             referencedColumns: ["id", "version"]
+          },
+          {
+            foreignKeyName: "agent_versions_test_run_fk"
+            columns: ["test_run_id"]
+            isOneToOne: false
+            referencedRelation: "agent_test_runs"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1907,6 +1964,7 @@ export type Database = {
           cancel_at_period_end: boolean
           current_period_end: string | null
           current_period_start: string | null
+          last_stripe_event_at: string | null
           organization_id: string
           past_due_since: string | null
           plan_code: string
@@ -1920,6 +1978,7 @@ export type Database = {
           cancel_at_period_end?: boolean
           current_period_end?: string | null
           current_period_start?: string | null
+          last_stripe_event_at?: string | null
           organization_id: string
           past_due_since?: string | null
           plan_code: string
@@ -1933,6 +1992,7 @@ export type Database = {
           cancel_at_period_end?: boolean
           current_period_end?: string | null
           current_period_start?: string | null
+          last_stripe_event_at?: string | null
           organization_id?: string
           past_due_since?: string | null
           plan_code?: string
