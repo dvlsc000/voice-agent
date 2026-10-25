@@ -29,3 +29,11 @@ export function supabaseSecretKey(): string | null {
   if (typeof window !== 'undefined') throw new Error('server only');
   return process.env.SUPABASE_SECRET_KEY || null;
 }
+
+/** Optional AI model connection for running assistant test calls from the operator console. */
+export function llmConfig(): { baseUrl: string; apiKey: string; model: string; authHeader: 'bearer' | 'api-key' } | null {
+  if (typeof window !== 'undefined') throw new Error('server only');
+  const { LLM_BASE_URL, LLM_API_KEY, LLM_MODEL, LLM_AUTH_HEADER } = process.env;
+  if (!LLM_BASE_URL || !LLM_API_KEY) return null;
+  return { baseUrl: LLM_BASE_URL, apiKey: LLM_API_KEY, model: LLM_MODEL ?? 'mistral-small-latest', authHeader: LLM_AUTH_HEADER === 'api-key' ? 'api-key' : 'bearer' };
+}

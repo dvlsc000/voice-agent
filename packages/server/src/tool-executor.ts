@@ -43,10 +43,41 @@ function redactArgs(args: Record<string, unknown>): Record<string, unknown> {
   return out;
 }
 
+/** Tools that change something. In dry-run (simulation) mode they are authorized but never executed. */
+export const WRITE_TOOLS = new Set(['book_appointment', 'reschedule_booking', 'cancel_booking', 'take_message', 'request_callback', 'capture_lead', 'transfer_to_human']);
+
+export interface ToolExecutorDeps {
+  db: Db;
+  booking: BookingService;
+  /** Simulation mode: reads are real, writes are simulated, nothing is logged to a call. */
+  dryRun?: boolean;
+  /** Records every executed tool call (simulation reports). */
+  onExecuted?: (name: string, result: ToolResult) => void;
+}
+
 export class ToolExecutor {
-  constructor(private readonly deps: { db: Db; booking: BookingService }) {}
+  constructor(private readonly deps: ToolExecutorDeps) {}
+
+  private simulate(name: string, args: Record<string, any>, session: CallSession): ToolResult {
+    switch (name) {
+      case 'book_appointment':
+      case 'reschedule_booking':
+        return {
+          ok: true,
+          data: { status: 'confirmed', booking_id: '00000000-0000-4000-8000-000000000000', reference_spoken: '4 8 2 9 1 5', when: formatSlotForSpeech(args.start ?? args.new_start, session.timezone, session.language) },
+          guidance: 'Confirm the booking, read the reference number slowly, and say it is needed to change or cancel.',
+        };
+      case 'cancel_booking':
+        return { ok: true, data: { status: 'cancelled' }, guidance: 'Tell the caller the booking is cancelled.' };
+      case 'transfer_to_human':
+        return { ok: true, action: { type: 'transfer', target: '+353000000000' }, guidance: 'Tell the caller you are putting them through.' };
+      default:
+        return { ok: true, data: { saved: true, urgent: args.urgent === true || args.urgency === 'urgent' || name === 'request_callback' }, guidance: 'Confirm the message has been passed on.' };
+    }
+  }
 
   private async log(session: CallSession, type: string, payload: Record<string, unknown>): Promise<void> {
+    if (this.deps.dryRun) return;
     await this.deps.db.query(`insert into public.call_events (organization_id, call_id, type, payload) values ($1, $2, $3, $4)`, [
       session.ctx.organizationId,
       session.ctx.callId,
@@ -66,6 +97,11 @@ export class ToolExecutor {
     await this.log(session, 'tool.requested', { toolCallId, name, args: redactArgs(args) });
     const org = session.ctx.organizationId;
     let result: ToolResult;
+    if (this.deps.dryRun && WRITE_TOOLS.has(auth.tool)) {
+      const r = this.simulate(auth.tool, args, session);
+      this.deps.onExecuted?.(auth.tool, r);
+      return r;
+    }
 
     try {
       switch (auth.tool) {
@@ -191,6 +227,7 @@ export class ToolExecutor {
       return { ok: false, guidance: 'Something went wrong on our side. Do not say the action succeeded. Offer to take a message.' };
     }
     await this.log(session, 'tool.result', { toolCallId, name, ok: result.ok, status: (result.data as any)?.status ?? null });
+    this.deps.onExecuted?.(auth.tool, result);
     return result;
   }
 

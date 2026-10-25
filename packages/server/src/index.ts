@@ -13,3 +13,4 @@ export * from './llm/scripted';
 export * from './llm/tool-specs';
 export * from './conversation/engine';
 export * from './call-lifecycle';
+export * from './agents';

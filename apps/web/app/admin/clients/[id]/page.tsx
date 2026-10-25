@@ -82,7 +82,10 @@ export default async function ClientDetail({ params, searchParams }: { params: P
             </div>
           ) : null}
 
-          <h2 className="mt-8 mb-2">Assistant</h2>
+          <div className="mt-8 mb-2 flex items-baseline justify-between">
+            <h2>Assistant</h2>
+            <a href={`/admin/clients/${id}/assistant`} className="text-[0.9rem] text-action-ink hover:underline">Settings, tests and versions</a>
+          </div>
           {v ? (
             <div className="sheet p-4">
               <p className="text-[0.85rem] text-ink-faint">Version {v.version_no}, {v.status}, created {DateTime.fromJSDate(v.created_at).toFormat('d LLL yyyy')}</p>
