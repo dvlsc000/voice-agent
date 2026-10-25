@@ -14,3 +14,4 @@ export * from './costs/rates';
 export * from './costs/model';
 export * from './billing/plans';
 export * from './providers/types';
+export * from './notifications/templates';
