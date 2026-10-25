@@ -1,0 +1,38 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres, POSTGRES_HOST_AUTH_METHOD: trust }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r typecheck
+      - run: pnpm --filter @vp/core test
+      - name: Apply migrations to a clean database
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f supabase/tests/supabase_shim.sql
+          for f in supabase/migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f "$f" > /dev/null; done
+      - run: cd packages/db && npx vitest run
+      - run: cd packages/server && npx vitest run
+      - name: Build web
+        run: pnpm --filter @vp/web build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_placeholder
+          NEXT_TELEMETRY_DISABLED: '1'
+      - name: Dependency audit
+        run: pnpm audit --prod --audit-level high
