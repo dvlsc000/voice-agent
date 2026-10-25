@@ -62,7 +62,10 @@ export default async function ClientDetail({ params, searchParams }: { params: P
 
       <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
         <section aria-labelledby="h-steps">
-          <h2 id="h-steps" className="mb-2">Going live</h2>
+          <div className="mb-2 flex items-baseline justify-between">
+            <h2 id="h-steps">Going live</h2>
+            <a href={`/admin/clients/${id}/onboarding`} className="text-[0.9rem] text-action-ink hover:underline">Set up and go live</a>
+          </div>
           <ol className="sheet divide-y divide-rule">
             {Object.entries(STEP_LABEL).map(([kind, label], i) => {
               const t = taskByKind.get(kind);

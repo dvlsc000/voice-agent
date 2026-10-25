@@ -51,3 +51,10 @@ export function billingEnv(): { secretKey: string; webhookSecret: string; meterE
   if (!STRIPE_SECRET_KEY || !STRIPE_WEBHOOK_SECRET) return null;
   return { secretKey: STRIPE_SECRET_KEY, webhookSecret: STRIPE_WEBHOOK_SECRET, meterEventName: STRIPE_METER_EVENT_NAME ?? 'call_seconds', automaticTax: STRIPE_AUTOMATIC_TAX === 'true' };
 }
+
+export function telephonyEnv(): { accountSid: string; authToken: string; gatewayUrl: string } | null {
+  if (typeof window !== 'undefined') throw new Error('server only');
+  const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, VOICE_GATEWAY_URL } = process.env;
+  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !VOICE_GATEWAY_URL) return null;
+  return { accountSid: TWILIO_ACCOUNT_SID, authToken: TWILIO_AUTH_TOKEN, gatewayUrl: VOICE_GATEWAY_URL.replace(/\/$/, '') };
+}
