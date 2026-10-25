@@ -44,3 +44,10 @@ export function googleOAuthConfig(): { clientId: string; clientSecret: string; s
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !OAUTH_STATE_SECRET || OAUTH_STATE_SECRET.length < 32) return null;
   return { clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, stateSecret: OAUTH_STATE_SECRET };
 }
+
+export function billingEnv(): { secretKey: string; webhookSecret: string; meterEventName: string; automaticTax: boolean } | null {
+  if (typeof window !== 'undefined') throw new Error('server only');
+  const { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_METER_EVENT_NAME, STRIPE_AUTOMATIC_TAX } = process.env;
+  if (!STRIPE_SECRET_KEY || !STRIPE_WEBHOOK_SECRET) return null;
+  return { secretKey: STRIPE_SECRET_KEY, webhookSecret: STRIPE_WEBHOOK_SECRET, meterEventName: STRIPE_METER_EVENT_NAME ?? 'call_seconds', automaticTax: STRIPE_AUTOMATIC_TAX === 'true' };
+}

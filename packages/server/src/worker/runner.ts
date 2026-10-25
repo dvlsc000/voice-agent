@@ -66,6 +66,7 @@ export async function schedulePeriodicJobs(db: Db, now = new Date()): Promise<vo
   const jobs: Array<[string, string]> = [
     ['sweep_bookings', `sweep_bookings:${minute}`],
     ['rollup_usage', `rollup_usage:${fiveMin}`],
+    ['report_usage_stripe', `report_usage_stripe:${fiveMin}`],
     ['apply_retention', `apply_retention:${hour}`],
     ['queue_reminders', `queue_reminders:${hour}`],
     ['queue_daily_summaries', `queue_daily_summaries:${day}`],

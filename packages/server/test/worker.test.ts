@@ -127,7 +127,7 @@ describe('background worker', () => {
     const t = new Date('2030-05-05T10:07:30Z');
     await Promise.all([schedulePeriodicJobs(db, t), schedulePeriodicJobs(db, t), schedulePeriodicJobs(db, t)]);
     const { rows } = await db.query(`select count(*)::int as n from public.jobs where dedupe_key like '%2030-05-05%'`);
-    expect(rows[0].n).toBe(5);
+    expect(rows[0].n).toBe(6);
   });
 
   it('usage roll-up fills the monthly table', async () => {

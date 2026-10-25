@@ -1,4 +1,4 @@
-import { BookingService, ConsoleEmailSender, Db, VaultSecretStore, calendarResolver, OpenAICompatibleChatModel, ResendEmailSender, ToolExecutor, TwilioSmsSender, createHandlers, runJobsOnce, schedulePeriodicJobs } from '@vp/server';
+import { BookingService, ConsoleEmailSender, Db, StripeClient, VaultSecretStore, calendarResolver, OpenAICompatibleChatModel, ResendEmailSender, ToolExecutor, TwilioSmsSender, createHandlers, runJobsOnce, schedulePeriodicJobs } from '@vp/server';
 import { hostname } from 'node:os';
 import { loadConfig } from './config';
 import { createGateway } from './server';
@@ -40,6 +40,9 @@ if (cfg.RUN_WORKER === 'true') {
     sms: cfg.TWILIO_SMS_FROM ? new TwilioSmsSender({ accountSid: cfg.TWILIO_ACCOUNT_SID, authToken: cfg.TWILIO_AUTH_TOKEN, from: cfg.TWILIO_SMS_FROM, region: cfg.TWILIO_REGION }) : null,
     siteUrl: cfg.SITE_URL,
     resolveCalendar,
+    billing: cfg.STRIPE_SECRET_KEY
+      ? { stripe: new StripeClient({ secretKey: cfg.STRIPE_SECRET_KEY }), siteUrl: cfg.SITE_URL, meterEventName: cfg.STRIPE_METER_EVENT_NAME, automaticTax: false }
+      : null,
   });
   const workerId = `${hostname()}-${process.pid}`;
   const loop = async () => {

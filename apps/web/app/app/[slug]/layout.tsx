@@ -13,7 +13,7 @@ export default async function OrgLayout({ children, params }: { children: React.
     { href: `${base}/calls`, label: 'Calls' },
     { href: `${base}/bookings`, label: 'Bookings' },
     { href: `${base}/messages`, label: 'Messages', badge: count ?? 0 },
-    ...(m.role === 'owner' || m.role === 'manager' ? [{ href: `${base}/settings`, label: 'Settings' }] : []),
+    ...(m.role === 'owner' || m.role === 'manager' ? [{ href: `${base}/settings`, label: 'Settings' }, { href: `${base}/billing`, label: 'Billing' }] : []),
   ];
   return (
     <Shell context={m.name} nav={nav}>

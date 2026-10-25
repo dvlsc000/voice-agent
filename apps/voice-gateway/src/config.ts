@@ -26,6 +26,8 @@ const schema = z.object({
   TWILIO_SMS_FROM: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_METER_EVENT_NAME: z.string().default('call_seconds'),
   RUN_WORKER: z.enum(['true', 'false']).default('true'),
 });
 export type Config = z.infer<typeof schema>;

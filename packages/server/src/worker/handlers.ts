@@ -11,6 +11,7 @@ import {
 import type { CalendarBinding } from '../booking-service';
 import type { Db, Queryable } from '../db';
 import { PermanentSendError, type EmailSender, type SmsSender } from '../messaging';
+import { reportUsageToStripe, type BillingConfig } from '../billing/stripe';
 import { NonRetryableJobError, type Job, type JobHandler } from './runner';
 
 export interface WorkerDeps {
@@ -19,6 +20,8 @@ export interface WorkerDeps {
   sms: SmsSender | null; // null = SMS not configured on this deployment
   siteUrl: string;
   resolveCalendar?: (organizationId: string, staffId: string) => Promise<CalendarBinding | null>;
+  /** Stripe usage reporting; null when billing isn't configured. */
+  billing?: BillingConfig | null;
   /** Bookings stuck in `committing` longer than this are treated as outcome-unknown. */
   staleCommitSeconds?: number;
 }
@@ -231,6 +234,11 @@ export function createHandlers(deps: WorkerDeps): Record<string, JobHandler> {
         await db.query(`update public.appointments set status = 'failed' where id = $1`, [a.id]);
         await notifyStaff(db, a, 'booking_needs_check_staff', `needs_check:${a.id}`);
       }
+    },
+
+    async report_usage_stripe() {
+      if (!deps.billing) return;
+      await reportUsageToStripe(db, deps.billing);
     },
 
     async apply_retention() {
