@@ -3,6 +3,7 @@ import { requireMembership } from '@/lib/auth';
 import { supabaseServer } from '@/lib/supabase/server';
 import { saveHours, saveService } from './actions';
 import { HoursForm } from './hours-form';
+import { SettingsTabs } from '@/components/settings-tabs';
 import { CalendarSection } from './calendar-section';
 
 export const metadata = { title: 'Settings' };
@@ -24,6 +25,7 @@ export default async function SettingsPage({ params, searchParams }: { params: P
   return (
     <>
       <PageHeader title="Settings" detail="What your assistant tells callers. Changes apply from the next call." />
+      <SettingsTabs slug={slug} active="" />
       <section aria-labelledby="hours-h" className="mb-10">
         <h2 id="hours-h" className="mb-1">Opening hours</h2>
         <p className="mb-3 text-ink-soft">Your regular week. Your assistant won’t offer bookings outside these times.</p>
