@@ -1,0 +1,145 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Colour carries meaning, like lamps on a switchboard:
+ *   cobalt = something you can do, green = live/confirmed, amber = needs your attention, red = failed.
+ * Nothing is coloured for decoration.
+ */
+@theme {
+  --font-sans: 'Schibsted Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ground: #f4f6f7;
+  --color-surface: #ffffff;
+  --color-ink: #15233b;
+  --color-ink-soft: #4b5a70;
+  --color-ink-faint: #7b8798;
+  --color-rule: #d9dee3;
+  --color-rule-strong: #b9c1ca;
+  --color-action: #2843d1;
+  --color-action-ink: #1a2fa3;
+  --color-action-wash: #e8ecfd;
+  --color-lamp-green: #2e9e6a;
+  --color-lamp-green-wash: #e4f4ec;
+  --color-lamp-amber: #e8a03a;
+  --color-lamp-amber-ink: #8a5a12;
+  --color-lamp-amber-wash: #fdf1df;
+  --color-lamp-red: #c8433a;
+  --color-lamp-red-wash: #fbe7e5;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  h2 {
+    font-size: 1.05rem;
+    font-weight: 620;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-action);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-weight: 560;
+    font-size: 0.93rem;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--color-action);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-action-ink);
+  }
+  .btn-quiet {
+    background: var(--color-surface);
+    border-color: var(--color-rule-strong);
+    color: var(--color-ink);
+  }
+  .btn-quiet:hover {
+    border-color: var(--color-ink-soft);
+  }
+  .field {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .field > span {
+    font-size: 0.85rem;
+    font-weight: 560;
+    color: var(--color-ink-soft);
+  }
+  .input {
+    width: 100%;
+    border: 1px solid var(--color-rule-strong);
+    background: var(--color-surface);
+    border-radius: 6px;
+    padding: 0.5rem 0.65rem;
+    font: inherit;
+    color: inherit;
+  }
+  .input:focus {
+    outline: 2px solid var(--color-action);
+    outline-offset: -1px;
+  }
+  .sheet {
+    background: var(--color-surface);
+    border: 1px solid var(--color-rule);
+    border-radius: 8px;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table th {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 560;
+    color: var(--color-ink-faint);
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .table td {
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--color-rule);
+    vertical-align: top;
+  }
+  .table tr:last-child td {
+    border-bottom: 0;
+  }
+}

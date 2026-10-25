@@ -14,8 +14,8 @@ import {
   type DayPart,
   type Slot,
 } from '@vp/core';
-import { isExclusionViolation, type Db, type Queryable } from './db.js';
-import { loadBusy, loadSchedulingConfig, loadService, type OrgSchedulingConfig } from './scheduling-config.js';
+import { isExclusionViolation, type Db, type Queryable } from './db';
+import { loadBusy, loadSchedulingConfig, loadService, type OrgSchedulingConfig } from './scheduling-config';
 
 export type BookingOutcome =
   | { status: 'confirmed'; appointmentId: string; reference: string; start: string; localStart: string; staffId: string }

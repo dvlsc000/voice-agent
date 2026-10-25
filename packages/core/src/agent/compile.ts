@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
-import type { Language } from '../i18n/locale.js';
-import { capabilitySchema, type IndustryTemplate } from '../templates/schema.js';
-import { TOOL_DEFINITIONS, toolsForCapabilities, type ToolName } from '../tools/registry.js';
+import type { Language } from '../i18n/locale';
+import { capabilitySchema, type IndustryTemplate } from '../templates/schema';
+import { TOOL_DEFINITIONS, toolsForCapabilities, type ToolName } from '../tools/registry';
 
 /** Tenant-editable agent settings. Validated config — never executable code (spec §28). */
 export const agentSettingsSchema = z.object({

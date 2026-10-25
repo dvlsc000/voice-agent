@@ -1,5 +1,5 @@
-import type { CompiledAgent } from '../agent/compile.js';
-import type { Slot } from '../scheduling/types.js';
+import type { CompiledAgent } from '../agent/compile';
+import type { Slot } from '../scheduling/types';
 
 /**
  * Provider boundaries. Application code depends only on these interfaces, so a voice platform,

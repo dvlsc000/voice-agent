@@ -8,7 +8,7 @@ import {
   type CalendarAdapter,
   type Capability,
 } from '@vp/core';
-import { BookingService, Db, ToolExecutor, renderBusinessFacts, type CallSession } from '../src/index.js';
+import { BookingService, Db, ToolExecutor, renderBusinessFacts, type CallSession } from '../src/index';
 
 /**
  * End-to-end booking flow against a real PostgreSQL with the production schema (no voice audio involved).

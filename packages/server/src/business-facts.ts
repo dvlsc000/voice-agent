@@ -1,5 +1,5 @@
 import { formatMoney, type Language } from '@vp/core';
-import type { Queryable } from './db.js';
+import type { Queryable } from './db';
 
 const DAY_NAMES: Record<Language, string[]> = {
   en: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],

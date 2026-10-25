@@ -1,4 +1,4 @@
-import { localToInstant } from './availability.js';
+import { localToInstant } from './availability';
 
 export type DayPart = 'morning' | 'afternoon' | 'evening' | 'any';
 

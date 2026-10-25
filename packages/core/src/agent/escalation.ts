@@ -1,5 +1,5 @@
-import type { Language } from '../i18n/locale.js';
-import type { IndustryTemplate } from '../templates/schema.js';
+import type { Language } from '../i18n/locale';
+import type { IndustryTemplate } from '../templates/schema';
 
 function normalise(s: string): string {
   return s.toLowerCase().normalize('NFC').replace(/[’']/g, "'").replace(/\s+/g, ' ');

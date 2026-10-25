@@ -7,9 +7,9 @@ import {
   type CallContext,
   type Language,
 } from '@vp/core';
-import type { BookingService } from './booking-service.js';
-import { renderBusinessFacts } from './business-facts.js';
-import type { Db } from './db.js';
+import type { BookingService } from './booking-service';
+import { renderBusinessFacts } from './business-facts';
+import type { Db } from './db';
 
 /** Mutable per-call session held by the voice gateway. Persisted as call_events for audit/replay. */
 export interface CallSession {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { capabilitySchema } from '../templates/schema.js';
+import { capabilitySchema } from '../templates/schema';
 
 /** Plans are data (DB rows), not code — prices change without deployments (spec §16, §29). */
 export const planSchema = z.object({

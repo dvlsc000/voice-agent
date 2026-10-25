@@ -8,7 +8,7 @@ import {
   serviceLevelForBilling,
   usageAlertLevel,
   type Plan,
-} from '../src/index.js';
+} from '../src/index';
 
 const starter: Plan = {
   code: 'starter',

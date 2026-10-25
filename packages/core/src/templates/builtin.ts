@@ -1,4 +1,4 @@
-import { templateSchema, type IndustryTemplate } from './schema.js';
+import { templateSchema, type IndustryTemplate } from './schema';
 
 const nameField = { key: 'customer_name', label: { en: 'Name', hr: 'Ime i prezime' }, required: true, sensitive: false };
 const phoneField = { key: 'customer_phone', label: { en: 'Phone number', hr: 'Broj telefona' }, required: true, sensitive: false };

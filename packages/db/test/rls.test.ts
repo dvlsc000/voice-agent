@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type pg from 'pg';
-import { as, client, insertAppointment, rejects, seed, type Fixture } from './helpers.js';
+import { as, client, insertAppointment, rejects, seed, type Fixture } from './helpers';
 
 let c: pg.Client;
 let f: Fixture;

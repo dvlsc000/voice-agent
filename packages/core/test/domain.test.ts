@@ -23,7 +23,7 @@ import {
   verifyReferenceAndPhone,
   type AgentSettings,
   type CallContext,
-} from '../src/index.js';
+} from '../src/index';
 
 describe('colloquial time expressions', () => {
   it('Irish English "half five" is 5:30', () => {

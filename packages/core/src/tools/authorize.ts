@@ -1,6 +1,6 @@
 import type { z } from 'zod';
-import type { Capability } from '../templates/schema.js';
-import { TOOL_DEFINITIONS, toolRequiresCapability, type ToolName } from './registry.js';
+import type { Capability } from '../templates/schema';
+import { TOOL_DEFINITIONS, toolRequiresCapability, type ToolName } from './registry';
 
 /** Server-side context for a live call. Built from the database, never from model output. */
 export interface CallContext {

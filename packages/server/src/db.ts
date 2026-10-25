@@ -22,10 +22,17 @@ export class Db {
     return this.pool.query<R>(text, values);
   }
 
-  async tx<T>(fn: (q: Queryable) => Promise<T>): Promise<T> {
+  /**
+   * Run a transaction. `actorUserId` attributes audit-log rows to the operator who triggered the change
+   * (privileges are unchanged — this only sets the identity the audit trigger records).
+   */
+  async tx<T>(fn: (q: Queryable) => Promise<T>, opts: { actorUserId?: string | null } = {}): Promise<T> {
     const client = await this.pool.connect();
     try {
       await client.query('begin');
+      if (opts.actorUserId) {
+        await client.query(`select set_config('request.jwt.claims', $1, true)`, [JSON.stringify({ sub: opts.actorUserId })]);
+      }
       const out = await fn(client);
       await client.query('commit');
       return out;

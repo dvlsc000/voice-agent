@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeAvailableSlots, localToInstant, pickSpokenOptions, type AvailabilityQuery } from '../src/index.js';
+import { computeAvailableSlots, localToInstant, pickSpokenOptions, type AvailabilityQuery } from '../src/index';
 
 const MARK = '11111111-1111-4111-8111-111111111111';
 const AOIFE = '22222222-2222-4222-8222-222222222222';

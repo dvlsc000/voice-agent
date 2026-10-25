@@ -1,5 +1,5 @@
 import type { BusyInterval, DateException, ServiceSpec, StaffSchedule, WeeklyHours } from '@vp/core';
-import type { Queryable } from './db.js';
+import type { Queryable } from './db';
 
 export interface OrgSchedulingConfig {
   organizationId: string;

@@ -8,3 +8,5 @@ coverage
 *.log
 .pgdata
 .turbo
+next-env.d.ts
+*.tsbuildinfo

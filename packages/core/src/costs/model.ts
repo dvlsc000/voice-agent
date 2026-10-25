@@ -1,4 +1,4 @@
-import { RATES } from './rates.js';
+import { RATES } from './rates';
 
 export type Stack = 'eu_native' | 'vapi_eu' | 'retell';
 export type LlmTier = 'small' | 'medium';

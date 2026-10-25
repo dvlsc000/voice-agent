@@ -6,7 +6,7 @@ import type {
   Slot,
   StaffSchedule,
   WeeklyHours,
-} from './types.js';
+} from './types';
 
 const HHMM = /^([01]\d|2[0-3]):([0-5]\d)$|^24:00$/;
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Capability } from '../templates/schema.js';
+import type { Capability } from '../templates/schema';
 
 /**
  * The complete allowlist of actions a voice agent can request. Nothing else is executable.
