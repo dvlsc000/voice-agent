@@ -1,4 +1,4 @@
-import { BookingService, ConsoleEmailSender, Db, OpenAICompatibleChatModel, ResendEmailSender, ToolExecutor, TwilioSmsSender, createHandlers, runJobsOnce, schedulePeriodicJobs } from '@vp/server';
+import { BookingService, ConsoleEmailSender, Db, VaultSecretStore, calendarResolver, OpenAICompatibleChatModel, ResendEmailSender, ToolExecutor, TwilioSmsSender, createHandlers, runJobsOnce, schedulePeriodicJobs } from '@vp/server';
 import { hostname } from 'node:os';
 import { loadConfig } from './config';
 import { createGateway } from './server';
@@ -10,7 +10,9 @@ import { TwilioCallControl } from './twilio/call-control';
 
 const cfg = loadConfig();
 const db = Db.fromUrl(cfg.DATABASE_URL, 10);
-const booking = new BookingService({ db });
+const google = cfg.GOOGLE_CLIENT_ID && cfg.GOOGLE_CLIENT_SECRET ? { clientId: cfg.GOOGLE_CLIENT_ID, clientSecret: cfg.GOOGLE_CLIENT_SECRET } : null;
+const resolveCalendar = calendarResolver(db, new VaultSecretStore(db), google);
+const booking = new BookingService({ db, resolveCalendar });
 const english = new DeepgramAuraTts({ apiKey: cfg.DEEPGRAM_API_KEY, host: cfg.DEEPGRAM_BASE, defaultVoice: cfg.DEEPGRAM_TTS_VOICE_EN });
 const croatian = cfg.AZURE_SPEECH_KEY
   ? new AzureTts({ key: cfg.AZURE_SPEECH_KEY, region: cfg.AZURE_SPEECH_REGION, voices: { hr: cfg.AZURE_TTS_VOICE_HR } })
@@ -37,7 +39,7 @@ if (cfg.RUN_WORKER === 'true') {
     email: cfg.RESEND_API_KEY ? new ResendEmailSender({ apiKey: cfg.RESEND_API_KEY, from: cfg.EMAIL_FROM }) : new ConsoleEmailSender(),
     sms: cfg.TWILIO_SMS_FROM ? new TwilioSmsSender({ accountSid: cfg.TWILIO_ACCOUNT_SID, authToken: cfg.TWILIO_AUTH_TOKEN, from: cfg.TWILIO_SMS_FROM, region: cfg.TWILIO_REGION }) : null,
     siteUrl: cfg.SITE_URL,
-    resolveCalendar: undefined,
+    resolveCalendar,
   });
   const workerId = `${hostname()}-${process.pid}`;
   const loop = async () => {

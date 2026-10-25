@@ -14,3 +14,6 @@ export * from './llm/tool-specs';
 export * from './conversation/engine';
 export * from './call-lifecycle';
 export * from './agents';
+export * from './integrations/google-calendar';
+export * from './integrations/connections';
+export * from './oauth-state';

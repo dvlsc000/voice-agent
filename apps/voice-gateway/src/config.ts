@@ -24,6 +24,8 @@ const schema = z.object({
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default('Reception <no-reply@example.com>'),
   TWILIO_SMS_FROM: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
   RUN_WORKER: z.enum(['true', 'false']).default('true'),
 });
 export type Config = z.infer<typeof schema>;

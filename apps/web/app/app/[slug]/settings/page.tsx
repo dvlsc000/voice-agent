@@ -3,11 +3,13 @@ import { requireMembership } from '@/lib/auth';
 import { supabaseServer } from '@/lib/supabase/server';
 import { saveHours, saveService } from './actions';
 import { HoursForm } from './hours-form';
+import { CalendarSection } from './calendar-section';
 
 export const metadata = { title: 'Settings' };
 
-export default async function SettingsPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function SettingsPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ calendar?: string }> }) {
   const { slug } = await params;
+  const { calendar } = await searchParams;
   const m = await requireMembership(slug, ['owner', 'manager']);
   const sb = await supabaseServer();
   const [hours, services] = await Promise.all([
@@ -59,6 +61,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ slug:
           ))}
         </div>
       </section>
+          <CalendarSection slug={slug} organizationId={m.organizationId} notice={calendar} />
     </>
   );
 }

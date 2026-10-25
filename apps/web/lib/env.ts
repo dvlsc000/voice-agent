@@ -37,3 +37,10 @@ export function llmConfig(): { baseUrl: string; apiKey: string; model: string; a
   if (!LLM_BASE_URL || !LLM_API_KEY) return null;
   return { baseUrl: LLM_BASE_URL, apiKey: LLM_API_KEY, model: LLM_MODEL ?? 'mistral-small-latest', authHeader: LLM_AUTH_HEADER === 'api-key' ? 'api-key' : 'bearer' };
 }
+
+export function googleOAuthConfig(): { clientId: string; clientSecret: string; stateSecret: string } | null {
+  if (typeof window !== 'undefined') throw new Error('server only');
+  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, OAUTH_STATE_SECRET } = process.env;
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !OAUTH_STATE_SECRET || OAUTH_STATE_SECRET.length < 32) return null;
+  return { clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, stateSecret: OAUTH_STATE_SECRET };
+}
