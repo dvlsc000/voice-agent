@@ -7,3 +7,8 @@ export * from './provisioning';
 export * from './messaging';
 export * from './worker/runner';
 export * from './worker/handlers';
+export * from './llm/types';
+export * from './llm/openai-compatible';
+export * from './llm/scripted';
+export * from './llm/tool-specs';
+export * from './conversation/engine';
