@@ -3,7 +3,7 @@
 Updated 2026-10-25. Statuses: Not started · Implemented but untested · Locally tested · Integration tested ·
 Staging verified · Production verified · Blocked by external dependency.
 
-**Overall: foundation built and locally tested. Not deployed. Not production-ready.** No real call has been made.
+**Overall: foundation built; database live on the Supabase development project; app not deployed. Not production-ready.** No real call has been made.
 
 ## Components
 
@@ -11,7 +11,7 @@ Staging verified · Production verified · Blocked by external dependency.
 |---|---|---|
 | Domain logic (`packages/core`): availability incl. DST, colloquial times (IE "half five" vs HR "pola pet"), booking state machine, caller verification, templates (barbershop, dental, law office, generic), tool allowlist + authorization, prompt compiler with AI disclosure, escalation detector, cost model, plans/overage/grace policy | **Locally tested** | 46 unit tests pass |
 | Database schema: 4 migrations, ~40 tables, RLS on all, exclusion constraint against double booking, DB-level booking state machine, audit triggers, jobs queue, retention | **Locally tested** on PostgreSQL 16 + Supabase auth shim | 24 tests pass (`pnpm db:test`) |
-| Same schema on Supabase (PG 17) | **Blocked** — decision D1 (existing tables clash) | — |
+| Same schema on Supabase dev project `didfoshmymuuzdlwhugd` (PG 17.11, eu-west-1) | **Integration tested** — 5 migrations applied 2026-10-25 after dropping the prototype tables (D1: approved). Isolation check on the live DB: 16/16 expected results (cross-tenant reads/writes blocked, analyst cannot see customers, owner cannot change status or read salt, anon denied, support read-only, double booking rejected); test data rolled back. Security advisor: only intentional INFO notes; performance advisor: FK indexes added. | Supabase advisors, `list_migrations` |
 | Booking engine + tool executor (`packages/server`): availability, hold→commit→confirm, idempotent replay, verify/reschedule/cancel, external-calendar failure handling, messages, transfers, PII-redacted call trace | **Integration tested** against real Postgres (no external calendar, no voice) | 9 tests pass |
 | Client provisioning from template (idempotent, draft agent, go-live blockers) | **Integration tested** against real Postgres | 3 tests pass |
 | Web app: magic-link sign-in (invite-only), MFA gate for operators, client dashboard (Today rail, calls, call detail, bookings, messages, hours & prices), operator console (overview, clients, create client, client checklist) | **Implemented, builds** — not run against a live Supabase project; **not visually reviewed** (no headless browser available in this workspace) | `next build` succeeds, 17 routes |
@@ -33,11 +33,11 @@ Staging verified · Production verified · Blocked by external dependency.
 
 ## Deployed
 
-Nothing.
+- Database schema to the Supabase **development** project (no client data). Web app and voice gateway: not deployed.
 
 ## Next implementation steps
 
-1. Apply migrations to a Supabase dev project (after D1) and re-run the RLS suite there; run advisors.
+1. Connect the repository to GitHub so CI runs (repo name needed).
 2. Voice gateway spike: Pipecat vs LiveKit Agents on Twilio `ie1` with Deepgram EU — measure latency gate.
 3. Croatian STT/TTS bake-off.
 4. Notification worker (email first), stale-`committing` sweeper, usage roll-up job.

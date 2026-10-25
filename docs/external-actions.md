@@ -7,7 +7,7 @@ Updated 2026-10-25.
 
 | # | Decision | Why it matters | Default if you don't decide |
 |---|---|---|---|
-| D1 | What to do with the **existing tables in Supabase project `didfoshmymuuzdlwhugd`** (`businesses`, `services`, `staff`, `customers` (4 rows), `bookings` (4 rows), `calls`, `business_hours`). Four names clash with the new schema. | The new migrations cannot be applied there until this is resolved. | Nothing is touched. |
+| ~~D1~~ | **Done 2026-10-25** — prototype tables and functions dropped. ~~What to do with the existing tables in Supabase project `didfoshmymuuzdlwhugd`** (`businesses`, `services`, `staff`, `customers` (4 rows), `bookings` (4 rows), `calls`, `business_hours`). Four names clash with the new schema. ~~ | | |
 | D2 | Use that project as **development** and create a separate **production** project later? | Separate dev/staging/prod credentials (spec §4). A second free project may be possible; a Pro plan costs money. | Treat it as development only. |
 | D3 | Product/brand name and domain | White-label emails, sign-in links, phone greeting. | "Reception" placeholder via `NEXT_PUBLIC_BRAND_NAME`. |
 
