@@ -14,7 +14,11 @@ export class Db {
   constructor(readonly pool: pg.Pool) {}
 
   static fromUrl(url: string, max = 10): Db {
-    return new Db(new pg.Pool({ connectionString: url, max }));
+    const pool = new pg.Pool({ connectionString: url, max });
+    // Poolers (e.g. Supabase) close idle connections. pg emits that on the pool; unhandled, it would crash the
+    // process and drop every live call. The pool discards the dead client and the next query reconnects.
+    pool.on('error', (e) => console.error(JSON.stringify({ at: new Date().toISOString(), event: 'db.idle_client_error', message: e.message })));
+    return new Db(pool);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

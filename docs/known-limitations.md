@@ -10,8 +10,7 @@ Updated 2026-10-25. These are true of the code today; each has an owner action o
 - Deepgram model choice for Croatian (`nova-3` with `language=hr`) is an assumption — verify it is supported, or use the
   Soniox adapter (not yet written).
 - Stripe, Google Calendar and Resend integrations are contract-tested against simulated APIs, not live accounts.
-- The web dashboards have never been opened in a browser (no headless browser available while building). Expect some
-  visual polish work after the first look.
+- The web dashboards have not been visually reviewed yet (the playground page has been, in headless Chromium).
 
 ## Product gaps
 - **Language switching mid-call**: speech recognition runs in the business's primary language. A bilingual business

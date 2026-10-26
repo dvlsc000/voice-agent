@@ -2,14 +2,17 @@
   "name": "voice-platform",
   "private": true,
   "packageManager": "pnpm@10.18.0",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "build": "pnpm -r build",
     "db:test": "bash scripts/db-test.sh",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "playground": "pnpm --filter @vp/voice-gateway playground"
   },
   "devDependencies": {
     "prettier": "^3.3.3",

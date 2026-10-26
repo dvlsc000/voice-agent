@@ -15,6 +15,7 @@ client is configuration, not code.
 | [docs/cost-model.md](docs/cost-model.md) | Unit economics with sourced rates |
 | [docs/risks.md](docs/risks.md) | Risk register |
 | [docs/external-actions.md](docs/external-actions.md) | Decisions, accounts and legal reviews needed from the business |
+| [docs/playground.md](docs/playground.md) | **Try the assistant without a phone number** (typed chat or microphone) |
 | [docs/launch-checklist.md](docs/launch-checklist.md) | Everything required before calling it production-ready |
 | [docs/known-limitations.md](docs/known-limitations.md) | What doesn't work yet, honestly |
 | [docs/operations/](docs/operations/) | Deployment, incident response, backups, onboarding SOP, extending, troubleshooting |

@@ -25,6 +25,7 @@ verification section passes. Not production-ready.** No real phone call has been
 | Onboarding: SSRF-safe website import (robots.txt, evidence), reviewed apply, number connection, supervised call, go-live gate | **Integration tested** | 8 + 5 tests |
 | Privacy: access export, verified erasure with audit scrubbing | **Integration tested** | 3 tests |
 | Web app: client dashboard (today rail, calls, call detail, bookings, messages, settings: hours/services/calendar/staff/closures/answers/team, billing), operator console (overview, clients, create client, set up & go live, assistant versions & tests, plans, operations, privacy) | **Implemented, builds** — not run against live Supabase; **not visually reviewed** | `next build` succeeds (29 routes) |
+| Browser playground: typed chat and microphone calls against demo businesses through the production call path (phone network replaced by 8 kHz mu-law over WebSocket) | **Integration tested** (6 tests) and **driven in headless Chromium** with a fake microphone: chat and voice bookings, no page errors, light/dark/mobile checked — **not yet run with real model/speech keys** | `apps/voice-gateway/test/playground.test.ts` |
 | Documentation: ADRs, cost model, risks, deployment, incident response, backups, onboarding SOP, extending, troubleshooting, limitations, launch checklist | Written | `docs/` |
 | CI | Written; **runs on GitHub** (push to `dvlsc000/voice-agent`) — check the Actions tab | `.github/workflows/ci.yml` |
 
@@ -35,7 +36,7 @@ verification section passes. Not production-ready.** No real phone call has been
 | `packages/core` unit | 46/46 passed |
 | `packages/db` RLS & integrity (local PG16) | 24/24 passed |
 | `packages/server` integration (local PG16) | 67/67 passed |
-| `apps/voice-gateway` session + end-to-end simulated call | 13/13 passed |
+| `apps/voice-gateway` session, end-to-end simulated call, playground | 19/19 passed |
 | Live Supabase isolation check (PG17) | 16/16 expected results |
 | `apps/web` typecheck + production build | passed |
 
